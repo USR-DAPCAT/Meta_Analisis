@@ -109,9 +109,8 @@ base_dades
 #
 
 
-META_covid1 = c("UK","France","Spain")
-res<-data.frame(cbind(ROR_covid1,SE_covid1))
-#
+
+
 ROR_covid1<-c(0.974110483,0.91228271,0.722705983)
 SE_covid1<-c((0.280447825),(0.141),(0.09718))
 META_covid1 = c("UK","France","Spain")
@@ -142,7 +141,7 @@ forest(meta2)
 
 
 ROR_covid3<-c(0.781,0.372,0.445)
-SE_covid3<-c(0.303,0.155,0,105)
+SE_covid3<-c(0.303,0.155,0.105)
 META_covid3 = c("UK","France","Spain")
 res3<-data.frame(cbind(ROR_covid3,SE_covid3))
 #
