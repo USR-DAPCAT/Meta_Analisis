@@ -1,5 +1,5 @@
 ---
-title: "Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)"
+title: "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)"
 author: "Rai Puig & Jordi Real"
 website: "https://github.com/USR-DAPCAT/"
 
@@ -35,39 +35,22 @@ output:
 
 
 
-# 0. Estado:
+# 0. State:
 
-> Des / 2020
+**Latest updates** 
 
+> Febrer/2022
 
+**Done**
 
-
-
-**Últimas actualizaciones** 
-
-**Realizado**
-
-> Febrero/2021
-
-&check; Mejora de los modelos no paramétricos con término spline(Glucosa)  <br/>
-
-> Setiembre/2020
-
-&check; Ampliar tablas descriptivas P25, Median , P75 etc.. <br/>
-&check; Cálculo de nuevas variable IFCC HBA1C, agrupador Comp_cardiovascular <br/>
-&check; Calcular y añadir p valores en tabla 2 <br/>
-&check; Actualizaciones modelos de mortalidad modelo definitivo <br/>
-&check; actualizaciones nuevos modelos de Ventilación Mecánica y/o mortalidad <br/>
-&check; Modelos por subgrupos <br/>
-&check; Forest plot de modelos <br/>
+* Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,Spain
 
 
+**Pending**
 
-**Pendent**
+* Error checking and debugging 
 
-* Revisión y depuración d'errors 
-
-# Análisis
+# Analysis
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, include=F,size="huge")
@@ -98,23 +81,25 @@ conductor<-here::here("conductor_meta_analisi.xlsx")
 ```
 
 
-```{r lectura, include = FALSE}
+```{r lectura, include = TRUE}
 
 base_dades<-readxl::read_excel(conductor)
+
+
+base_dades
 
 
 ```
 
 
 
-```{r recodes_analisis}
+```{r recodes_analisis,include=TRUE}
 
 
 
 #1# .	Death ~ Macrovascular disease (unadjusted)
 #2# .	Death ~ Macrovascular disease + Age + Sex
 #3# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
-#4# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + Ethnic group + BMI 
 
 
 #falta canviar SE-France
@@ -122,8 +107,8 @@ base_dades<-readxl::read_excel(conductor)
 #------------------------------------------------------------------------------#
 #
 #
-ROR_covid1<-c(2.64881,2.49,2.06)
-SE_covid1<-c((0.6495893),(0.141),exp(0.09718))
+
+
 META_covid1 = c("UK","France","Spain")
 res<-data.frame(cbind(ROR_covid1,SE_covid1))
 #
@@ -133,57 +118,38 @@ META_covid1 = c("UK","France","Spain")
 res<-data.frame(cbind(ROR_covid1,SE_covid1))
 
 
-meta2<-metagen(TE=res$ROR_covid1,
+meta<-metagen(TE=res$ROR_covid1,
                seTE=res$SE_covid1,
                studlab = META_covid1,
                sm = 'OR',
-               title = "Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
+summary(meta)
+forest(meta)
+
+
+
+ROR_covid2<-c(0.724,0.531,0.470)
+SE_covid2<-c(0.295,0.153,0.102)
+META_covid2 = c("UK","France","Spain")
+res2<-data.frame(cbind(ROR_covid2,SE_covid2))
+
+meta2<-metagen(res2$ROR_covid2,res2$SE_covid2,studlab = META_covid2,sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 summary(meta2)
 forest(meta2)
 
 
-qnorm(1-.05/2)
 
-
-#
-#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#
-#
-ROR_covid2<-c(2.062049,1.70,1.60)
-SE_covid2<-c(exp(0.5323558),exp(0.5),exp(0.472713))
-META_covid2 = c("UK","France","Spain")
-res2<-data.frame(cbind(ROR_covid2,SE_covid2))
-#
-meta2<-metagen(res2$ROR_covid2,res2$SE_covid2,studlab = META_covid2,sm = 'ROR')
-forest(meta2)
-#
-#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-
-
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#
-#
-ROR_covid3<-c(2.184311,1.45,1.56)
-SE_covid3<-c(exp(0.5779912),exp(0.5),exp(0.444231))
+ROR_covid3<-c(0.781,0.372,0.445)
+SE_covid3<-c(0.303,0.155,0,105)
 META_covid3 = c("UK","France","Spain")
 res3<-data.frame(cbind(ROR_covid3,SE_covid3))
 #
-meta3<-metagen(res3$ROR_covid3,res3$SE_covid3,studlab = META_covid3,sm = 'ROR')
-forest(meta3)
-#
-#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
+meta3<-metagen(res3$ROR_covid3,res3$SE_covid3,studlab = META_covid3,sm = 'OR',title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
+forest(meta3)
+summary(meta3)
 
 ```
 
