@@ -1,5 +1,5 @@
 ---
-title: "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)"
+title: "Meta_Analisi.Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19). \\pkg{foo}"
 author: "Rai Puig & Jordi Real"
 website: "https://github.com/USR-DAPCAT/"
 
@@ -101,7 +101,9 @@ base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG2,SE_OR=SE2,OR_MACRO,I1
 
 base_dades%>%
   kable(caption="Table of Meta-Analysis",digits = 2)%>% 
-      kableExtra::kable_classic_2()
+      kableExtra::kable_classic_2(full_width = F)
+
+
 
 base_dades$LOG_OR<-as.numeric(base_dades$LOG_OR)
 base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
