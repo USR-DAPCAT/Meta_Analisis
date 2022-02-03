@@ -39,12 +39,14 @@ output:
 
 **Latest updates** 
 
-> Febrer/2022
+> February/2022
 
 **Done**
 
 * Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,Spain
-
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted)
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
 
 **Pending**
 
@@ -67,9 +69,10 @@ ipak(packages)
 library("meta") 
 library("dplyr")
 library("ggplot2")
-library("metafor")
-library("esc")
-library("dummies")
+
+#library("metafor")
+#library("esc")
+#library("dummies")
 
 # Funcions 
 link_source<-paste0("https://github.com/jrealgatius/Stat_codis/blob/master/funcions_propies.R","?raw=T")
@@ -79,9 +82,14 @@ devtools::source_url(link_source)
 conductor<-here::here("conductor_meta_analisi.xlsx")
 
 
+# apunts per entendre bé el META_ANALYSIS::
+
 #https://www.rdocumentation.org/packages/meta/versions/1.1-2/topics/forest
+#https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/
 
 ```
+
+## 1  	Table of Meta-Analysis
 
 
 ```{r lectura, include = TRUE}
@@ -101,75 +109,104 @@ base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
 
 
 ```
+## 2 Theory:What Are Meta-Analyses?
 
+**Meta-Analyses. Most meta-analyses can be seen as an advanced type of a systematic review. The scope of meta-analyses is clearly defined beforehand, primary studies are also selected in a systematic and reproducible way, and there are also clear standards through which the validity of the evidence is assessed. This is why it is common to find studies being named a “systematic review and meta-analysis.” However, there is one aspect which makes meta-analyses special. Meta-analyses aim to combine results from previous studies in a quantitative way. The goal of meta-analyses is to integrate quantitative outcomes reported in the selected studies into one numerical estimate. This estimate then summarizes all the individual results. Meta-analyses quantify, for example, the effect of a medication, the prevalence of a disease, or the correlation between two properties, across all studies1. They can therefore only be applied to studies which report quantitative results. Compared to systematic reviews, meta-analyses often have to be more exclusive concerning the kind of evidence that is summarized. To perform a meta-analysis, it is usually necessary that studies used the same design and type of measurement, and/or delivered the same intervention** 
 
+**The Statistic I2 (Higgins & Thompson’s Statistic) and τ2 , tell us if there is a lot of variability (Heterogeneity) between the different studies of the Meta-analysis, or if the difference is only due to chance**   
 
-```{r recodes_analisis,include=TRUE}
+**When the I2, exceeds 25%, or the P of τ2 <0.05, the variability must be studied.**
 
-#1# .	Death ~ Macrovascular disease (unadjusted)
-#2# .	Death ~ Macrovascular disease + Age + Sex
-#3# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
+* I2= 25%: Low heterogeneity
+* I2= 50%: Moderate heterogeneity
+* I2= 75%: Substantial heterogeneity.
 
+```{r recodes,include=TRUE}
 
-#falta canviar SE-France
-
-
-
-#LOG_OR	SE_OR
 
 ROR_covid1<-base_dades%>%filter(COUNTRY=="UK1" | COUNTRY=="FRANCE1" | COUNTRY=="SPAIN1")%>%select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid2<-base_dades%>%filter(COUNTRY=="UK2" | COUNTRY=="FRANCE2" | COUNTRY=="SPAIN2")%>%select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid3<-base_dades%>%filter(COUNTRY=="UK3" | COUNTRY=="FRANCE3" | COUNTRY=="SPAIN3")%>%select(COUNTRY,LOG_OR,SE_OR)
 
+```
+## 3  	RESULTS:
+
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+```{r analisis0,include=TRUE}
 
 
-meta<-metagen(TE=ROR_covid1$LOG_OR,
+
+```
+
+## 3.1  	Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+
+* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis1,include=TRUE}
+
+#1# .	Death ~ Macrovascular disease (unadjusted)
+
+meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
                seTE=ROR_covid1$SE_OR,
                studlab = ROR_covid1$COUNTRY,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-#summary(meta)
-forest(meta,fontsize=7.5, boxsize=0.8)
+
+meta::forest(meta1,fontsize=9, boxsize=1)
 
 
 
-#ROR_covid2<-c(0.724,0.531,0.470)
-#SE_covid2<-c(0.295,0.153,0.102)
-#META_covid2 = c("UK","France","Spain")
-#res2<-data.frame(cbind(ROR_covid2,SE_covid2))
+```
+
+## 3.2  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+
+* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 
+```{r analisis2,include=TRUE}
 
-meta2<-metagen(TE=ROR_covid2$LOG_OR,
+#2# .	Death ~ Macrovascular disease + Age + Sex
+
+
+meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
                seTE=ROR_covid2$SE_OR,
                studlab = ROR_covid2$COUNTRY,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-#summary(meta2)
-forest(meta2,fontsize=7.5, boxsize=0.8)
+
+meta::forest(meta2,fontsize=9, boxsize=1)
 
 
+```
 
-#ROR_covid3<-c(0.781,0.372,0.445)
-#SE_covid3<-c(0.303,0.155,0.105)
-#META_covid3 = c("UK","France","Spain")
-#res3<-data.frame(cbind(ROR_covid3,SE_covid3))
-#
+## 3.3  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis3,include=TRUE}
+
+#3# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
 
 
-meta3<-metagen(TE=ROR_covid3$LOG_OR,
+meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
                seTE=ROR_covid3$SE_OR,
                studlab = ROR_covid3$COUNTRY,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-#summary(meta3)
-forest(meta3,fontsize=7.5, boxsize=0.8)
+
+meta::forest(meta3,fontsize=9, boxsize=1)
+
 
 
 ```
+
+
 
 ```
 
