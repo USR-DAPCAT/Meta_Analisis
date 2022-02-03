@@ -97,7 +97,7 @@ conductor<-here::here("conductor_meta_analisi.xlsx")
 base_dades<-readxl::read_excel(conductor)
 
 
-base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG2,SE_OR=SE2,OR_MACRO,I1,I2)
+base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG,SE_OR=SE,OR_MACRO,I1,I2)
 
 base_dades%>%
   kable(caption="Table of Meta-Analysis",digits = 2)%>% 
@@ -145,7 +145,7 @@ ROR_covid3<-base_dades%>%filter(COUNTRY=="UK3" | COUNTRY=="FRANCE3" | COUNTRY=="
 
 ## 3.1  	Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
 
-* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 ```{r analisis1,include=TRUE}
 
@@ -166,8 +166,7 @@ meta::forest(meta1,fontsize=9.2, boxsize=5)
 
 ## 3.2  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
 
-* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
-
+* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 ```{r analisis2,include=TRUE}
 
@@ -188,7 +187,7 @@ meta::forest(meta2,fontsize=9.2, boxsize=5)
 
 ## 3.3  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
 
-* In this  case, there is no variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 ```{r analisis3,include=TRUE}
 
