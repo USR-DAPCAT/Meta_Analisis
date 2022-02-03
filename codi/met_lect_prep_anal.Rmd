@@ -111,11 +111,11 @@ base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
 ```
 ## 2 Theory:What Are Meta-Analyses?
 
-**Meta-Analyses. Most meta-analyses can be seen as an advanced type of a systematic review. The scope of meta-analyses is clearly defined beforehand, primary studies are also selected in a systematic and reproducible way, and there are also clear standards through which the validity of the evidence is assessed. This is why it is common to find studies being named a “systematic review and meta-analysis.” However, there is one aspect which makes meta-analyses special. Meta-analyses aim to combine results from previous studies in a quantitative way. The goal of meta-analyses is to integrate quantitative outcomes reported in the selected studies into one numerical estimate. This estimate then summarizes all the individual results. Meta-analyses quantify, for example, the effect of a medication, the prevalence of a disease, or the correlation between two properties, across all studies1. They can therefore only be applied to studies which report quantitative results. Compared to systematic reviews, meta-analyses often have to be more exclusive concerning the kind of evidence that is summarized. To perform a meta-analysis, it is usually necessary that studies used the same design and type of measurement, and/or delivered the same intervention** 
+*Meta-analyses aim to combine results from previous studies in a quantitative way. The goal of meta-analyses is to integrate quantitative outcomes reported in the selected studies into one numerical estimate. This estimate then summarizes all the individual results. Meta-analyses quantify, for example, the effect of a medication, the prevalence of a disease, or the correlation between two properties, across all studies. They can therefore only be applied to studies which report quantitative results. Compared to systematic reviews, meta-analyses often have to be more exclusive concerning the kind of evidence that is summarized. To perform a meta-analysis, it is usually necessary that studies used the same design and type of measurement, and/or delivered the same intervention.* 
 
-**The Statistic I2 (Higgins & Thompson’s Statistic) and τ2 , tell us if there is a lot of variability (Heterogeneity) between the different studies of the Meta-analysis, or if the difference is only due to chance**   
+**The Statistics I2 (Higgins & Thompson’s Statistic) and τ2 , tell us if there is a lot of variability (Heterogeneity) between the different studies of the Meta-analysis, or if the difference is only due to chance**   
 
-**When the I2, exceeds 25%, or the P of τ2 <0.05, the variability must be studied.**
+**When the I2, exceeds 25%, or the P of τ2 <0.05, the variability must be studied.*
 
 * I2= 25%: Low heterogeneity
 * I2= 50%: Moderate heterogeneity
