@@ -156,7 +156,7 @@ meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta1,fontsize=9, boxsize=1)
+meta::forest(meta1,fontsize=9.2, boxsize=5)
 
 
 
@@ -179,7 +179,7 @@ meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta2,fontsize=9, boxsize=1)
+meta::forest(meta2,fontsize=9.2, boxsize=5)
 
 
 ```
@@ -200,7 +200,7 @@ meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3,fontsize=9, boxsize=1)
+meta::forest(meta3,fontsize=9.2, boxsize=5)
 
 
 
