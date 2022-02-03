@@ -78,6 +78,9 @@ devtools::source_url(link_source)
 
 conductor<-here::here("conductor_meta_analisi.xlsx")
 
+
+#https://www.rdocumentation.org/packages/meta/versions/1.1-2/topics/forest
+
 ```
 
 
@@ -86,7 +89,15 @@ conductor<-here::here("conductor_meta_analisi.xlsx")
 base_dades<-readxl::read_excel(conductor)
 
 
-base_dades
+base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG2,SE_OR=SE2,OR_MACRO,I1,I2)
+
+base_dades%>%
+  kable(caption="Table of Meta-Analysis",digits = 2)%>% 
+      kableExtra::kable_classic_2()
+
+base_dades$LOG_OR<-as.numeric(base_dades$LOG_OR)
+base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
+
 
 
 ```
@@ -95,65 +106,70 @@ base_dades
 
 ```{r recodes_analisis,include=TRUE}
 
-
-
 #1# .	Death ~ Macrovascular disease (unadjusted)
 #2# .	Death ~ Macrovascular disease + Age + Sex
 #3# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
 
 
 #falta canviar SE-France
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#
-#
 
 
 
+#LOG_OR	SE_OR
 
-ROR_covid1<-c(0.974110483,0.91228271,0.722705983)
-SE_covid1<-c((0.280447825),(0.141),(0.09718))
-META_covid1 = c("UK","France","Spain")
-res<-data.frame(cbind(ROR_covid1,SE_covid1))
+ROR_covid1<-base_dades%>%filter(COUNTRY=="UK1" | COUNTRY=="FRANCE1" | COUNTRY=="SPAIN1")%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid2<-base_dades%>%filter(COUNTRY=="UK2" | COUNTRY=="FRANCE2" | COUNTRY=="SPAIN2")%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid3<-base_dades%>%filter(COUNTRY=="UK3" | COUNTRY=="FRANCE3" | COUNTRY=="SPAIN3")%>%select(COUNTRY,LOG_OR,SE_OR)
 
 
-meta<-metagen(TE=res$ROR_covid1,
-               seTE=res$SE_covid1,
-               studlab = META_covid1,
+
+meta<-metagen(TE=ROR_covid1$LOG_OR,
+               seTE=ROR_covid1$SE_OR,
+               studlab = ROR_covid1$COUNTRY,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-summary(meta)
-forest(meta)
+#summary(meta)
+forest(meta,fontsize=7.5, boxsize=0.8)
 
 
 
-ROR_covid2<-c(0.724,0.531,0.470)
-SE_covid2<-c(0.295,0.153,0.102)
-META_covid2 = c("UK","France","Spain")
-res2<-data.frame(cbind(ROR_covid2,SE_covid2))
+#ROR_covid2<-c(0.724,0.531,0.470)
+#SE_covid2<-c(0.295,0.153,0.102)
+#META_covid2 = c("UK","France","Spain")
+#res2<-data.frame(cbind(ROR_covid2,SE_covid2))
 
-meta2<-metagen(res2$ROR_covid2,res2$SE_covid2,studlab = META_covid2,sm = 'OR',
+
+
+meta2<-metagen(TE=ROR_covid2$LOG_OR,
+               seTE=ROR_covid2$SE_OR,
+               studlab = ROR_covid2$COUNTRY,
+               sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
-summary(meta2)
-forest(meta2)
+
+#summary(meta2)
+forest(meta2,fontsize=7.5, boxsize=0.8)
 
 
 
-ROR_covid3<-c(0.781,0.372,0.445)
-SE_covid3<-c(0.303,0.155,0.105)
-META_covid3 = c("UK","France","Spain")
-res3<-data.frame(cbind(ROR_covid3,SE_covid3))
+#ROR_covid3<-c(0.781,0.372,0.445)
+#SE_covid3<-c(0.303,0.155,0.105)
+#META_covid3 = c("UK","France","Spain")
+#res3<-data.frame(cbind(ROR_covid3,SE_covid3))
 #
-meta3<-metagen(res3$ROR_covid3,res3$SE_covid3,studlab = META_covid3,sm = 'OR',title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-forest(meta3)
-summary(meta3)
+
+meta3<-metagen(TE=ROR_covid3$LOG_OR,
+               seTE=ROR_covid3$SE_OR,
+               studlab = ROR_covid3$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+#summary(meta3)
+forest(meta3,fontsize=7.5, boxsize=0.8)
+
 
 ```
-
-
-
 
 ```
 
