@@ -43,10 +43,11 @@ output:
 
 **Done**
 
-* Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,Spain
-* Meta-Analysis of Death ~ Macrovascular disease (unadjusted)
-* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex
-* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
+* Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,HM(Spain),Barcelona
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease. 
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 
 **Pending**
 
@@ -126,16 +127,17 @@ base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
 ```{r recodes,include=TRUE}
 
 
-ROR_covid1<-base_dades%>%filter(COUNTRY=="UK1" | COUNTRY=="FRANCE1" | COUNTRY=="SPAIN1")%>%select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid2<-base_dades%>%filter(COUNTRY=="UK2" | COUNTRY=="FRANCE2" | COUNTRY=="SPAIN2")%>%select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid3<-base_dades%>%filter(COUNTRY=="UK3" | COUNTRY=="FRANCE3" | COUNTRY=="SPAIN3")%>%select(COUNTRY,LOG_OR,SE_OR)
-
+ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1"   | COUNTRY=="HM_MOD1"  | COUNTRY=="BCN_MOD1" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"   | COUNTRY=="HM_MOD2"  | COUNTRY=="BCN_MOD2" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid3<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"       | COUNTRY=="BCN_MOD3" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" )%>%select(COUNTRY,LOG_OR,SE_OR)
 ```
 ## 3  	RESULTS:
 
 * Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
 * Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
 * Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 
 ```{r analisis0,include=TRUE}
 
@@ -145,7 +147,7 @@ ROR_covid3<-base_dades%>%filter(COUNTRY=="UK3" | COUNTRY=="FRANCE3" | COUNTRY=="
 
 ## 3.1  	Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
 
-* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 
 ```{r analisis1,include=TRUE}
 
@@ -158,7 +160,7 @@ meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta1,fontsize=9.2, boxsize=5)
+meta::forest(meta1,fontsize=8.2, boxsize=5)
 
 
 
@@ -166,7 +168,7 @@ meta::forest(meta1,fontsize=9.2, boxsize=5)
 
 ## 3.2  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
 
-* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
+* In this  case, there is  variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
 
 ```{r analisis2,include=TRUE}
 
@@ -180,14 +182,14 @@ meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta2,fontsize=9.2, boxsize=5)
+meta::forest(meta2,fontsize=8.2, boxsize=5)
 
 
 ```
 
 ## 3.3  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
 
-* In this  case, there is  variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis3,include=TRUE}
 
@@ -201,7 +203,30 @@ meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3,fontsize=9.2, boxsize=5)
+meta::forest(meta3,fontsize=8.2, boxsize=5)
+
+
+
+```
+## 3.4  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease+BMI + Etnia.
+
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis4,include=TRUE}
+
+#
+
+
+
+meta4<-meta::metagen(TE=ROR_covid4$LOG_OR,
+               seTE=ROR_covid4$SE_OR,
+               studlab = ROR_covid4$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta4,fontsize=8.2, boxsize=5)
+
 
 
 
