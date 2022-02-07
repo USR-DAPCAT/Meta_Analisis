@@ -208,6 +208,7 @@ meta::forest(meta3,fontsize=8.2, boxsize=5)
 
 
 ```
+
 ## 3.4  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease+BMI + Etnia.
 
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
