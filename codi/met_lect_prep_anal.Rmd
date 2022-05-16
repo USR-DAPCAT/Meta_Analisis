@@ -134,7 +134,6 @@ ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1
 ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"   | COUNTRY=="HM_MOD2"  | COUNTRY=="BCN_MOD2" )%>%select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid3<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"       | COUNTRY=="BCN_MOD3" )%>%select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" )%>%select(COUNTRY,LOG_OR,SE_OR)
-
 ROR_covid5<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" | COUNTRY=="HM_MOD3"   )%>%select(COUNTRY,LOG_OR,SE_OR)
 
 
@@ -168,6 +167,8 @@ meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
 
 
 meta::forest(meta1,fontsize=8.2, boxsize=5)
+
+
 
 ```
 
