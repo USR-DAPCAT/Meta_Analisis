@@ -45,10 +45,24 @@ output:
 **Done**
 
 * Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,HM(Spain),Barcelona
+
 * Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
 * Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
 * Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease. 
 * Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+* Meta-Analysis of Uci ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+* Meta-Analysis of Uci_Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
+
 
 **Pending**
 
