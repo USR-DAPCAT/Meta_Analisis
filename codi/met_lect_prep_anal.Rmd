@@ -163,7 +163,8 @@ ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRA
   select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci"       | COUNTRY=="BCN_MOD3_uci" )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" )%>%
+  select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid5_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" | COUNTRY=="HM_MOD3_uci"   )%>%
   select(COUNTRY,LOG_OR,SE_OR)
 
@@ -175,7 +176,8 @@ ROR_covid2_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci_death"       | C
   select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid3_uci_death<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci_death"   | COUNTRY=="HM_MOD3_uci_death"       | COUNTRY=="BCN_MOD3_uci_death" )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid4_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" )%>%
+  select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" | COUNTRY=="HM_MOD3_uci_death"   )%>%
   select(COUNTRY,LOG_OR,SE_OR)
 
