@@ -122,9 +122,22 @@ base_dades%>%
       kableExtra::kable_classic_2(full_width = F)
 
 
+esquema<-readxl::read_excel(conductor,sheet="esquema")
+
+
+
+esquema%>%
+  kable(caption="Table of Models",digits = 2)%>% 
+      kableExtra::kable_classic_2(full_width = F)
+
+
 
 base_dades$LOG_OR<-as.numeric(base_dades$LOG_OR)
 base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
+
+
+
+
 
 
 
@@ -170,15 +183,15 @@ ROR_covid5_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRA
 
 
 
-ROR_covid1_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci_death"       | COUNTRY=="FRANCE_MOD1_uci_death"   | COUNTRY=="HM_MOD1_uci_death"  | COUNTRY=="BCN_MOD1_uci_death" )%>%
+ROR_covid1_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci_death"       | COUNTRY=="FRANCE_MOD1_uci_death"   | COUNTRY=="HM_MOD1_uci_death"   )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid2_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci_death"       | COUNTRY=="FRANCE_MOD2_uci_death"   | COUNTRY=="HM_MOD2_uci_death"  | COUNTRY=="BCN_MOD2_uci_death" )%>%
+ROR_covid2_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci_death"       | COUNTRY=="FRANCE_MOD2_uci_death"   | COUNTRY=="HM_MOD2_uci_death"   )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid3_uci_death<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci_death"   | COUNTRY=="HM_MOD3_uci_death"       | COUNTRY=="BCN_MOD3_uci_death" )%>%
+ROR_covid3_uci_death<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci_death"   | COUNTRY=="HM_MOD3_uci_death"        )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid4_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" )%>%
+ROR_covid4_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"    )%>%
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" | COUNTRY=="HM_MOD3_uci_death"   )%>%
+ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="HM_MOD3_uci_death"   )%>%
   select(COUNTRY,LOG_OR,SE_OR)
 
 
@@ -224,7 +237,7 @@ ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | C
 * UK.Model        Uci or death ~ Macrovascular disease (unadjusted).
 * FRANCE.Model    Uci or death ~ Macrovascular disease (unadjusted).
 * HM.Model        Uci or death ~ Macrovascular disease (unadjusted).
-* BCN.Model       Uci or death ~ Macrovascular disease (unadjusted).
+
 
 
 
@@ -261,7 +274,7 @@ meta::forest(meta1b,fontsize=8.2, boxsize=5)
 ```
 
 ## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 ```{r analisis_1c,include=TRUE}
 
 
@@ -295,7 +308,6 @@ meta::forest(meta1c,fontsize=8.2, boxsize=5)
 * UK.Model        Uci or death ~ Macrovascular disease + Age + Sex.
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex.
 * HM.Model        Uci or death ~ Macrovascular disease + Age + Sex.
-* BCN.Model       Uci or death ~ Macrovascular disease + Age + Sex.
 
 
 
@@ -342,7 +354,7 @@ meta::forest(meta2b,fontsize=8.2, boxsize=5)
 
 ```
 ## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 ```{r analisis2c,include=TRUE}
 
 
@@ -377,7 +389,6 @@ meta::forest(meta2c,fontsize=8.2, boxsize=5)
 
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * HM.Model        Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
-* BCN.Model       Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------" + "---------------------"
 
 
 ## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
@@ -417,7 +428,7 @@ meta::forest(meta3b,fontsize=8.2, boxsize=5)
 ```
 
 ## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 3 studies (Common effect model).
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 
 
 ```{r analisis3c,include=TRUE}
@@ -449,12 +460,11 @@ meta::forest(meta3c,fontsize=8.2, boxsize=5)
 
 * UK.Model        Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
-* BCN.Model       Uci or death ~ Macrovascular disease + Age + Sex + "-----------"+ "--------------" + Microvascular disease + BMI + Etnia.
 
 
 
 ## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 4 studies (Common effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis4a,include=TRUE}
 
@@ -471,7 +481,7 @@ meta::forest(meta4,fontsize=8.2, boxsize=5)
 ```
 
 ## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 4 studies (Common effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis4b,include=TRUE}
 
@@ -492,7 +502,7 @@ meta::forest(meta4b,fontsize=8.2, boxsize=5)
 ```
 
 ## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 4 studies (Random effect model).
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Random effect model).
 
 ```{r analisis4c,include=TRUE}
 
@@ -529,7 +539,6 @@ meta::forest(meta4c,fontsize=8.2, boxsize=5)
 * UK.Model        Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 * HM.Model        Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
-* BCN.Model       Uci or death ~ Macrovascular disease + Age + Sex + "-----------"+ "--------------" + Microvascular disease + BMI + Etnia.
 
 
 
@@ -580,7 +589,7 @@ meta::forest(meta5b,fontsize=8.2, boxsize=5)
 
 
 ## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 
 ```{r analisis5c,include=TRUE}
