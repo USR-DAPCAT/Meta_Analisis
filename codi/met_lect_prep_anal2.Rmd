@@ -1,0 +1,323 @@
+---
+title: "Meta_Analisi.Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19). \\pkg{foo}"
+author: "Rai Puig & Jordi Real"
+website: "https://github.com/USR-DAPCAT/"
+
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+
+
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+    fig_caption: true
+    css: logos_css/usr_styles.css
+  pdf_document: default
+  word_document: default
+
+---
+
+&nbsp;
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"https://www.idiapjgol.org/images/logo.png\" style=\"float: right ;width: 130px;\"/>')
+     $head.prepend('<img src=\"https://avatars2.githubusercontent.com/u/57066591?s=200&v=4\" style=\"margin-left:25% ;width: 80px;\"/>')
+     $head.prepend('<img src=\"logos_css/logoDAP_Cat.png\" style=\"float: left:1;width: 185px;\"/>')
+   });
+</script>
+
+
+<div class="watermark">DRAFT</div>
+
+****
+
+
+
+# 0. State:
+
+**Latest updates** 
+
+> February/2022
+
+**Done**
+
+* Meta_Analisi Associations of macrovascular complications DM and Covid-19: UK,France,HM(Spain),Barcelona
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease. 
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+**Pending**
+
+* Error checking and debugging 
+
+# Analysis
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, include=F,size="huge")
+packages <-c("metafor","esc","readxl","esc","dummies")
+
+ipak<-function(pkg){
+  new.pkg<-pkg[!(pkg%in%installed.packages()[,"Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg,dependencies=TRUE)
+  sapply(pkg,require, character.only=TRUE)}
+
+ipak(packages)
+
+library("meta") 
+library("dplyr")
+library("ggplot2")
+
+#library("metafor")
+#library("esc")
+#library("dummies")
+
+# Funcions 
+link_source<-paste0("https://github.com/jrealgatius/Stat_codis/blob/master/funcions_propies.R","?raw=T")
+devtools::source_url(link_source)
+
+
+conductor<-here::here("conductor_meta_analisi.xlsx")
+
+
+# apunts per entendre bé el META_ANALYSIS::
+
+#https://www.rdocumentation.org/packages/meta/versions/1.1-2/topics/forest
+#https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/
+
+```
+
+## 1  	Table of Meta-Analysis
+
+
+```{r lectura, include = TRUE}
+
+base_dades<-readxl::read_excel(conductor)
+
+
+base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG,SE_OR=SE,OR_MACRO,I1,I2)
+
+base_dades%>%
+  kable(caption="Table of Meta-Analysis",digits = 2)%>% 
+      kableExtra::kable_classic_2(full_width = F)
+
+
+
+base_dades$LOG_OR<-as.numeric(base_dades$LOG_OR)
+base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
+
+
+
+```
+## 2 Theory:What Are Meta-Analyses?
+
+*Meta-analyses aim to combine results from previous studies in a quantitative way. The goal of meta-analyses is to integrate quantitative outcomes reported in the selected studies into one numerical estimate. This estimate then summarizes all the individual results. Meta-analyses quantify, for example, the effect of a medication, the prevalence of a disease, or the correlation between two properties, across all studies. They can therefore only be applied to studies which report quantitative results. Compared to systematic reviews, meta-analyses often have to be more exclusive concerning the kind of evidence that is summarized. To perform a meta-analysis, it is usually necessary that studies used the same design and type of measurement, and/or delivered the same intervention.* 
+
+**The Statistics I2 (Higgins & Thompson’s Statistic) and τ2 , tell us if there is a lot of variability (Heterogeneity) between the different studies of the Meta-analysis, or if the difference is only due to chance**   
+
+**When the I2, exceeds 25%, or the P of τ2 <0.05, the variability must be studied.*
+
+* I2= 25%: Low heterogeneity
+* I2= 50%: Moderate heterogeneity
+* I2= 75%: Substantial heterogeneity.
+
+```{r recodes,include=TRUE}
+
+
+ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1"   | COUNTRY=="HM_MOD1"  | COUNTRY=="BCN_MOD1" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"   | COUNTRY=="HM_MOD2"  | COUNTRY=="BCN_MOD2" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid3<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"       | COUNTRY=="BCN_MOD3" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" )%>%select(COUNTRY,LOG_OR,SE_OR)
+
+
+ROR_covid1_uci<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci"       | COUNTRY=="FRANCE_MOD1_uci"   | COUNTRY=="HM_MOD1_uci"  | COUNTRY=="BCN_MOD1_uci" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRANCE_MOD2_uci"   | COUNTRY=="HM_MOD2_uci"  | COUNTRY=="BCN_MOD2_uci" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci"       | COUNTRY=="BCN_MOD3_uci" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" )%>%select(COUNTRY,LOG_OR,SE_OR)
+
+ROR_covid1_uci_death<-base_dades%>%
+  filter(COUNTRY=="UK_MOD1_uci_death"       | COUNTRY=="FRANCE_MOD1_uci_death"   | COUNTRY=="HM_MOD1_uci_death"  | COUNTRY=="BCN_MOD1_uci_death" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid2_uci_death<-base_dades%>%
+  filter(COUNTRY=="UK_MOD2_uci_death"       | COUNTRY=="FRANCE_MOD2_uci_death"   | COUNTRY=="HM_MOD2_uci_death"  | COUNTRY=="BCN_MOD2_uci_death" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid3_uci_death<-base_dades%>%
+  filter(COUNTRY=="FRANCE_MOD3_uci_death"   | COUNTRY=="HM_MOD3_uci_death"       | COUNTRY=="BCN_MOD3_uci_death" )%>%select(COUNTRY,LOG_OR,SE_OR)
+ROR_covid4_uci_death<-base_dades%>%
+  filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="BCN_MOD4_uci_death" )%>%select(COUNTRY,LOG_OR,SE_OR)
+
+# Imv ?
+
+```
+## 3  	RESULTS:
+
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
+* Meta-Analysis of Uci ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
+* Meta-Analysis of Uci_Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
+
+```{r analisis0,include=TRUE}
+
+
+
+```
+
+## 3.1a  	Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
+
+```{r analisis1,include=TRUE}
+
+#1# .	Death ~ Macrovascular disease (unadjusted)
+
+meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
+               seTE=ROR_covid1$SE_OR,
+               studlab = ROR_covid1$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta1,fontsize=8.2, boxsize=5)
+
+
+
+```
+## 3.1b  	Meta-Analysis of Uci ~ Macrovascular disease (unadjusted).
+
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
+
+```{r analisis1,include=TRUE}
+
+#1# .	Death ~ Macrovascular disease (unadjusted)
+
+meta1b<-meta::metagen(TE=ROR_covid1_uci$LOG_OR,
+               seTE=ROR_covid1_uci$SE_OR,
+               studlab = ROR_covid1_uci$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci  in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta1b,fontsize=8.2, boxsize=5)
+
+
+
+```
+## 3.1c  	Meta-Analysis of Uci_Death ~ Macrovascular disease (unadjusted).
+
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
+
+```{r analisis1,include=TRUE}
+
+#1# .	Death ~ Macrovascular disease (unadjusted)
+
+meta1b<-meta::metagen(TE=ROR_covid1_uci_death$LOG_OR,
+               seTE=ROR_covid1_uci_death$SE_OR,
+               studlab = ROR_covid1_uci_death$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci or Death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta1b,fontsize=8.2, boxsize=5)
+
+
+
+```
+
+## 3.2  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+
+* In this  case, there is  variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
+
+```{r analisis2,include=TRUE}
+
+#2# .	Death ~ Macrovascular disease + Age + Sex
+
+
+meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
+               seTE=ROR_covid2$SE_OR,
+               studlab = ROR_covid2$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta2,fontsize=8.2, boxsize=5)
+
+#??
+
+
+
+```
+
+## 3.3  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis3,include=TRUE}
+
+#3# .	Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease 
+
+
+meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
+               seTE=ROR_covid3$SE_OR,
+               studlab = ROR_covid3$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta3,fontsize=8.2, boxsize=5)
+
+#????
+
+```
+
+## 3.4  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease+BMI + Etnia.
+
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis4,include=TRUE}
+
+#
+
+
+
+meta4<-meta::metagen(TE=ROR_covid4$LOG_OR,
+               seTE=ROR_covid4$SE_OR,
+               studlab = ROR_covid4$COUNTRY,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta4,fontsize=8.2, boxsize=5)
+
+#???
+
+
+```
+
+
+
+```
+
+
+
+&nbsp;
+<hr />
+<p style="text-align: center;">A work by $Jordi Real$ $Rai Puig$ </a></p>
+<p style="text-align: center;">$Llepali System$ </a></p>
+<p style="text-align: center;"><span style="color: #808080;"><em><https://github.com/USR-DAPCAT/></em></span></p>
+
+
