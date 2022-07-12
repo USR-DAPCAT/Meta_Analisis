@@ -65,7 +65,7 @@ output:
 * MODEL1::[Meta-Analysis of IMV ~ Macrovascular disease (unadjusted)]
 * MODEL2::[Meta-Analysis of IMV ~ Macrovascular disease + Age + Sex]
 * MODEL3::[Meta-Analysis of IMV ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease]
-* MODEL4::[Meta-Analysis of IMV ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia]
+
 
 
 
@@ -252,6 +252,10 @@ ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>%
 * FRANCE.Model    Uci or death ~ Macrovascular disease (unadjusted).
 * HM.Model        Uci or death ~ Macrovascular disease (unadjusted).
 
+* FRANCE.Model    imv ~ Macrovascular disease (unadjusted).
+* HM.Model        imv ~ Macrovascular disease (unadjusted).
+
+
 
 ## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
@@ -339,6 +343,8 @@ meta::forest(meta1d,fontsize=8.2, boxsize=5)
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex.
 * HM.Model        Uci or death ~ Macrovascular disease + Age + Sex.
 
+* FRANCE.Model    imv ~ Macrovascular disease + Age + Sex.
+* HM.Model        imv ~ Macrovascular disease + Age + Sex.
 
 
 
@@ -410,7 +416,7 @@ meta::forest(meta2c,fontsize=8.2, boxsize=5)
 
 ## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
-```{r analisis2c,include=TRUE}
+```{r analisis2d,include=TRUE}
 
 
 
@@ -444,6 +450,10 @@ meta::forest(meta2d,fontsize=8.2, boxsize=5)
 
 * FRANCE.Model    Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * HM.Model        Uci or death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
+
+* FRANCE.Model    imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+* HM.Model        imv ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
+
 
 
 ## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
