@@ -230,6 +230,12 @@ ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>%
 * Meta-Analysis of Uci_Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 
 
+* Meta-Analysis of imv ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of imv ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+* Meta-Analysis of imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
 ```
 
 
