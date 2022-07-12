@@ -199,11 +199,11 @@ ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | C
 #11.07.2022#
 
 
-ROR_covid1_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD1_imv")%>% 
+ROR_covid1_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD1_imv" | COUNTRY=="HM_MOD1_imv"   )%>% 
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid2_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD2_imv")%>% 
+ROR_covid2_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD2_imv"  | COUNTRY=="HM_MOD2_imv" )%>% 
   select(COUNTRY,LOG_OR,SE_OR)
-ROR_covid3_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_imv")%>% 
+ROR_covid3_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_imv"  | COUNTRY=="HM_MOD3_imv")%>% 
   select(COUNTRY,LOG_OR,SE_OR)
 ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>% 
   select(COUNTRY,LOG_OR,SE_OR)
@@ -307,7 +307,7 @@ meta::forest(meta1c,fontsize=8.2, boxsize=5)
 
 
 ## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* 
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model). 
 ```{r analisis_1d,include=TRUE}
 
 meta1d<-meta::metagen(TE=ROR_covid1_imv$LOG_OR,
@@ -409,7 +409,7 @@ meta::forest(meta2c,fontsize=8.2, boxsize=5)
 
 
 ## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* ??
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 ```{r analisis2c,include=TRUE}
 
 
@@ -501,7 +501,7 @@ meta::forest(meta3c,fontsize=8.2, boxsize=5)
 
 ```
 ## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* ???
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 
 
 ```{r analisis3d,include=TRUE}
@@ -589,24 +589,7 @@ meta::forest(meta4c,fontsize=8.2, boxsize=5)
 
 
 ```
-## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
-* ???
 
-```{r analisis4d,include=TRUE}
-
-
-meta4d<-meta::metagen(TE=ROR_covid4_imv$LOG_OR,
-               seTE=ROR_covid4_imv$SE_OR,
-               studlab = ROR_covid4_imv$COUNTRY,
-               sm = 'OR',
-               title = "Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
-
-
-meta::forest(meta4d,fontsize=8.2, boxsize=5)
-
-
-
-```
 
 
 ## 3.5  	Meta-Analysis of General.
