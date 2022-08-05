@@ -121,7 +121,7 @@ conductor_codis2<-here::here("codis_Covid_Agrupadores_juny.xlsx")
 base_dades<-readxl::read_excel(conductor)
 
 
-base_dades<-base_dades %>% select(COUNTRY=camp,LOG_OR=LOG,SE_OR=SE,OR_MACRO,I1,I2)
+base_dades<-base_dades %>% select(COUNTRY=camp,COUNTRY2=camp2,LOG_OR=LOG,SE_OR=SE,OR_MACRO,I1,I2)
 
 base_dades%>%
   kable(caption="Table of Meta-Analysis",digits = 2)%>% 
@@ -163,50 +163,50 @@ base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
 ```{r recodes,include=TRUE}
 
 ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1"   | COUNTRY=="HM_MOD1"  | COUNTRY=="BCN_MOD1" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"   | COUNTRY=="HM_MOD2"  | COUNTRY=="BCN_MOD2" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"       | COUNTRY=="BCN_MOD3" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid5<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" | COUNTRY=="HM_MOD3"   )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 
 ROR_covid1_uci<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci"       | COUNTRY=="FRANCE_MOD1_uci"   | COUNTRY=="HM_MOD1_uci"  | COUNTRY=="BCN_MOD1_uci" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRANCE_MOD2_uci"   | COUNTRY=="HM_MOD2_uci"  | COUNTRY=="BCN_MOD2_uci" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci"       | COUNTRY=="BCN_MOD3_uci" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid5_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" | COUNTRY=="HM_MOD3_uci"   )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 
 ROR_covid1_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci_death"       | COUNTRY=="FRANCE_MOD1_uci_death"   | COUNTRY=="HM_MOD1_uci_death"   )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci_death"       | COUNTRY=="FRANCE_MOD2_uci_death"   | COUNTRY=="HM_MOD2_uci_death"   )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3_uci_death<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci_death"   | COUNTRY=="HM_MOD3_uci_death"        )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"    )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid5_uci_death<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci_death"       | COUNTRY=="FRANCE_MOD4_uci_death"   | COUNTRY=="HM_MOD3_uci_death"   )%>%
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 
 
 #11.07.2022#
 
 
 ROR_covid1_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD1_imv" | COUNTRY=="HM_MOD1_imv"   )%>% 
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD2_imv"  | COUNTRY=="HM_MOD2_imv" )%>% 
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_imv"  | COUNTRY=="HM_MOD3_imv")%>% 
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>% 
-  select(COUNTRY,LOG_OR,SE_OR)
+  select(COUNTRY2,LOG_OR,SE_OR)
  
 
 
@@ -263,22 +263,35 @@ ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>%
 
 
 
-## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 ```{r analisis_1a,include=TRUE}
 
 meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
                seTE=ROR_covid1$SE_OR,
-               studlab = ROR_covid1$COUNTRY,
+               studlab = ROR_covid1$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-meta::forest(meta1,fontsize=8.2, boxsize=5)
+
+#meta::forest(meta1,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5))
+
+meta::forest(meta1,
+             fontsize=9,
+             boxsize=5,
+             col.square="black", 
+             hetstat=TRUE,
+             leftcols="studlab",
+             rightcols=c("effect","ci","w.fixed"),
+             xlim=c(0.2, 5),
+             squaresize=0.5,
+             plotwidth=unit(9,"cm"),
+             colgap=unit(3, "mm"))
 
 ```
 
 
-## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19).
+## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
 ```{r analisis_1b,include=TRUE}
 
@@ -286,17 +299,19 @@ meta::forest(meta1,fontsize=8.2, boxsize=5)
 
 meta1b<-meta::metagen(TE=ROR_covid1_uci$LOG_OR,
                seTE=ROR_covid1_uci$SE_OR,
-               studlab = ROR_covid1_uci$COUNTRY,
+               studlab = ROR_covid1_uci$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta1b,fontsize=8.2, boxsize=5)
+
+
+meta::forest(meta1b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.1, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with UCI or DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 ```{r analisis_1c,include=TRUE}
 
@@ -305,29 +320,29 @@ meta::forest(meta1b,fontsize=8.2, boxsize=5)
 
 meta1c<-meta::metagen(TE=ROR_covid1_uci_death$LOG_OR,
                seTE=ROR_covid1_uci_death$SE_OR,
-               studlab = ROR_covid1_uci_death$COUNTRY,
+               studlab = ROR_covid1_uci_death$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta1c,fontsize=8.2, boxsize=5)
+meta::forest(meta1c,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
 
 
-## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model). 
 ```{r analisis_1d,include=TRUE}
 
 meta1d<-meta::metagen(TE=ROR_covid1_imv$LOG_OR,
                seTE=ROR_covid1_imv$SE_OR,
-               studlab = ROR_covid1_imv$COUNTRY,
+               studlab = ROR_covid1_imv$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta1d,fontsize=8.2, boxsize=5)
+meta::forest(meta1d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
@@ -354,18 +369,18 @@ meta::forest(meta1d,fontsize=8.2, boxsize=5)
 
 
 
-## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
 ```{r analisis2a,include=TRUE}
 
 meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
                seTE=ROR_covid2$SE_OR,
-               studlab = ROR_covid2$COUNTRY,
+               studlab = ROR_covid2$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-meta::forest(meta2,fontsize=8.2, boxsize=5)
-
+meta::forest(meta2,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),
+             squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
@@ -373,29 +388,28 @@ meta::forest(meta2,fontsize=8.2, boxsize=5)
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 ```{r analisis2b,include=TRUE}
 
-
-
-
 meta2b<-meta::metagen(TE=ROR_covid2_uci$LOG_OR,
                seTE=ROR_covid2_uci$SE_OR,
-               studlab = ROR_covid2_uci$COUNTRY,
+               studlab = ROR_covid2_uci$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta2b,fontsize=8.2, boxsize=5)
-
+meta::forest(meta2b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),
+             squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
 
 
 ```
-## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with UCI or DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 ```{r analisis2c,include=TRUE}
 
@@ -403,13 +417,12 @@ meta::forest(meta2b,fontsize=8.2, boxsize=5)
 
 meta2c<-meta::metagen(TE=ROR_covid2_uci_death$LOG_OR,
                seTE=ROR_covid2_uci_death$SE_OR,
-               studlab = ROR_covid2_uci_death$COUNTRY,
+               studlab = ROR_covid2_uci_death$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta2c,fontsize=8.2, boxsize=5)
-
+meta::forest(meta2c,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
@@ -420,7 +433,7 @@ meta::forest(meta2c,fontsize=8.2, boxsize=5)
 ```
 
 
-## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 ```{r analisis2d,include=TRUE}
 
@@ -428,12 +441,12 @@ meta::forest(meta2c,fontsize=8.2, boxsize=5)
 
 meta2d<-meta::metagen(TE=ROR_covid2_imv$LOG_OR,
                seTE=ROR_covid2_imv$SE_OR,
-               studlab = ROR_covid2_imv$COUNTRY,
+               studlab = ROR_covid2_imv$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta2d,fontsize=8.2, boxsize=5)
+meta::forest(meta2d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
@@ -462,25 +475,25 @@ meta::forest(meta2d,fontsize=8.2, boxsize=5)
 
 
 
-## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 ```{r analisis3a,include=TRUE}
 
 meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
                seTE=ROR_covid3$SE_OR,
-               studlab = ROR_covid3$COUNTRY,
+               studlab = ROR_covid3$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3,fontsize=8.2, boxsize=5)
+meta::forest(meta3,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis3b,include=TRUE}
@@ -489,16 +502,17 @@ meta::forest(meta3,fontsize=8.2, boxsize=5)
 
 meta3b<-meta::metagen(TE=ROR_covid3_uci$LOG_OR,
                seTE=ROR_covid3_uci$SE_OR,
-               studlab = ROR_covid3_uci$COUNTRY,
+               studlab = ROR_covid3_uci$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3b,fontsize=8.2, boxsize=5)
+meta::forest(meta3b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with UCI or DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 
 
@@ -506,17 +520,18 @@ meta::forest(meta3b,fontsize=8.2, boxsize=5)
 
 meta3c<-meta::metagen(TE=ROR_covid3_uci_death$LOG_OR,
                seTE=ROR_covid3_uci_death$SE_OR,
-               studlab = ROR_covid3_uci_death$COUNTRY,
+               studlab = ROR_covid3_uci_death$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3c,fontsize=8.2, boxsize=5)
+meta::forest(meta3c,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
 ```
-## Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 
 
@@ -524,12 +539,12 @@ meta::forest(meta3c,fontsize=8.2, boxsize=5)
 
 meta3d<-meta::metagen(TE=ROR_covid3_imv$LOG_OR,
                seTE=ROR_covid3_imv$SE_OR,
-               studlab = ROR_covid3_imv$COUNTRY,
+               studlab = ROR_covid3_imv$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with imv in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta3d,fontsize=8.2, boxsize=5)
+meta::forest(meta3d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
@@ -552,7 +567,8 @@ meta::forest(meta3d,fontsize=8.2, boxsize=5)
 
 
 
-## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia).
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis4a,include=TRUE}
@@ -560,16 +576,17 @@ meta::forest(meta3d,fontsize=8.2, boxsize=5)
 
 meta4<-meta::metagen(TE=ROR_covid4$LOG_OR,
                seTE=ROR_covid4$SE_OR,
-               studlab = ROR_covid4$COUNTRY,
+               studlab = ROR_covid4$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
-meta::forest(meta4,fontsize=8.2, boxsize=5)
+meta::forest(meta4,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.01, 22),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia).
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
 
 ```{r analisis4b,include=TRUE}
@@ -577,17 +594,18 @@ meta::forest(meta4,fontsize=8.2, boxsize=5)
 
 meta4b<-meta::metagen(TE=ROR_covid4_uci$LOG_OR,
                seTE=ROR_covid4_uci$SE_OR,
-               studlab = ROR_covid4_uci$COUNTRY,
+               studlab = ROR_covid4_uci$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta4b,fontsize=8.2, boxsize=5)
+meta::forest(meta4b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.01, 6),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+
+## Meta_Analisi Associations of macrovascular complications with UCI or DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Random effect model).
 
 ```{r analisis4c,include=TRUE}
@@ -595,12 +613,12 @@ meta::forest(meta4b,fontsize=8.2, boxsize=5)
 
 meta4c<-meta::metagen(TE=ROR_covid4_uci_death$LOG_OR,
                seTE=ROR_covid4_uci_death$SE_OR,
-               studlab = ROR_covid4_uci_death$COUNTRY,
+               studlab = ROR_covid4_uci_death$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta4c,fontsize=8.2, boxsize=5)
+meta::forest(meta4c,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
@@ -628,7 +646,7 @@ meta::forest(meta4c,fontsize=8.2, boxsize=5)
 
 
 
-## Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Other ajusted model.
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 
 
@@ -636,18 +654,18 @@ meta::forest(meta4c,fontsize=8.2, boxsize=5)
 
 meta5<-meta::metagen(TE=ROR_covid5$LOG_OR,
                seTE=ROR_covid5$SE_OR,
-               studlab = ROR_covid5$COUNTRY,
+               studlab = ROR_covid5$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta5,fontsize=8.2, boxsize=5)
+meta::forest(meta5,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
 ```
 
-## Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Other ajusted model.
 * In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 
 ```{r analisis5b,include=TRUE}
@@ -659,20 +677,19 @@ meta::forest(meta5,fontsize=8.2, boxsize=5)
 
 meta5b<-meta::metagen(TE=ROR_covid5_uci$LOG_OR,
                seTE=ROR_covid5_uci$SE_OR,
-               studlab = ROR_covid5_uci$COUNTRY,
+               studlab = ROR_covid5_uci$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta5b,fontsize=8.2, boxsize=5)
-
+meta::forest(meta5b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 
 ```
 
 
-## Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)
+## Meta_Analisi Associations of macrovascular complications with UCI or DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Other ajusted model.
 * In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Random effect model).
 
 
@@ -680,12 +697,12 @@ meta::forest(meta5b,fontsize=8.2, boxsize=5)
 
 meta5c<-meta::metagen(TE=ROR_covid5_uci_death$LOG_OR,
                seTE=ROR_covid5_uci_death$SE_OR,
-               studlab = ROR_covid5_uci_death$COUNTRY,
+               studlab = ROR_covid5_uci_death$COUNTRY2,
                sm = 'OR',
                title = "Meta_Analisi Associations of macrovascular complications with Uci or death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
 
 
-meta::forest(meta5c,fontsize=8.2, boxsize=5)
+meta::forest(meta5c,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.random"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 
 ```
