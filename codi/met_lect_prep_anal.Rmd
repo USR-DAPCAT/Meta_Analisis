@@ -166,7 +166,7 @@ ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"   | COUNTRY=="HM_MOD2"  | COUNTRY=="BCN_MOD2" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
-ROR_covid3<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"       | COUNTRY=="BCN_MOD3" )%>%
+ROR_covid3<-base_dades%>%filter(COUNTRY=="UK_MOD3"       | COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"  | COUNTRY=="BCN_MOD3" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"   | COUNTRY=="BCN_MOD4" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
@@ -177,7 +177,7 @@ ROR_covid1_uci<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci"       | COUNTRY=="FRA
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRANCE_MOD2_uci"   | COUNTRY=="HM_MOD2_uci"  | COUNTRY=="BCN_MOD2_uci" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
-ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci"       | COUNTRY=="BCN_MOD3_uci" )%>%
+ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="UK_MOD3_uci"       | COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci"  | COUNTRY=="BCN_MOD3_uci" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"       | COUNTRY=="FRANCE_MOD4_uci"   | COUNTRY=="BCN_MOD4_uci" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
@@ -240,7 +240,7 @@ ROR_covid4_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD4_imv")%>%
 
 
 ```
-## 3.1  	Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+## 3.1  	Meta-Analysis of Death/Uci/Uci_Death/Imv~ Macrovascular disease (unadjusted).
 
 * UK.Model        Death ~ Macrovascular disease (unadjusted).
 * FRANCE.Model    Death ~ Macrovascular disease (unadjusted).
@@ -348,7 +348,7 @@ meta::forest(meta1d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 ```
 
 
-## 3.2  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+## 3.2  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular disease + Age + Sex.
 
 * UK.Model        Death ~ Macrovascular disease + Age + Sex.
 * FRANCE.Model    Death ~ Macrovascular disease + Age + Sex.
@@ -457,12 +457,14 @@ meta::forest(meta2d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 
 ```
 
-## 3.3  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+## 3.3  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
 
+* UK.Model        Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * FRANCE.Model    Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * HM.Model        Death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
 * BCN.Model       Death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------" + "---------------------"
 
+* UK.Model        Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * FRANCE.Model    Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
 * HM.Model        Uci ~ Macrovascular disease + Age + Sex + Hypertension + "--------------"  + Microvascular disease.
 * BCN.Model       Uci ~ Macrovascular disease + Age + Sex + Hypertension + "--------------" + "---------------------"
@@ -476,7 +478,7 @@ meta::forest(meta2d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 
 
 ## Meta_Analisi Associations of macrovascular complications with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
-* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 3 studies (Random effect model).
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Random effect model).
 
 ```{r analisis3a,include=TRUE}
 
@@ -494,7 +496,7 @@ meta::forest(meta3,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,lef
 ```
 
 ## Meta_Analisi Associations of macrovascular complications with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
-* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+* In this  case, there is  not variability between the 4 studies, so we will accept the average effect of the 4 studies (Common effect model).
 
 ```{r analisis3b,include=TRUE}
 
@@ -552,7 +554,7 @@ meta::forest(meta3d,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 
 
 
-## 3.4  	Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease+BMI + Etnia.
+## 3.4  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease+BMI + Etnia.
 
 * UK.Model        Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
 * FRANCE.Model    Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
