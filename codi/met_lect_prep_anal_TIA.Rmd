@@ -555,7 +555,7 @@ ROR_covid3_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_imv"  )%>%
 
 
 ```
-## 3.1  	Meta-Analysis of Death/Uci/Imv~ Macrovascular disease -PVD- (unadjusted).
+## 3.1  	Meta-Analysis of Death/Uci/Imv~ Macrovascular disease -TIA- (unadjusted).
 
 * UK.Model        Death ~ Macrovascular disease (unadjusted).
 * FRANCE.Model    Death ~ Macrovascular disease (unadjusted).

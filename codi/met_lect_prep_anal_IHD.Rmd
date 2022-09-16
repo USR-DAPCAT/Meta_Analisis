@@ -664,7 +664,7 @@ meta::forest(meta1b,
 
 
 
-## 3.2  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular -PVD- disease + Age + Sex.
+## 3.2  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular -IHD- disease + Age + Sex.
 
 * UK.Model        Death ~ Macrovascular disease + Age + Sex.
 * FRANCE.Model    Death ~ Macrovascular disease + Age + Sex.
