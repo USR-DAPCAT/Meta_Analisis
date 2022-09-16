@@ -1,0 +1,780 @@
+---
+title: "Meta_Analisi.Associations of macrovascular complications(Transient Ischaemic Attack-TIA) with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19). \\pkg{foo}"
+author: "Rai Puig & Jordi Real"
+website: "https://github.com/USR-DAPCAT/"
+
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+
+
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+    fig_caption: true
+    css: logos_css/usr_styles.css
+  pdf_document: default
+  word_document: default
+  
+  bibliography: references.bib 
+---
+
+&nbsp;
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"https://www.idiapjgol.org/images/logo.png\" style=\"float: right ;width: 130px;\"/>')
+     $head.prepend('<img src=\"https://avatars2.githubusercontent.com/u/57066591?s=200&v=4\" style=\"margin-left:25% ;width: 80px;\"/>')
+     $head.prepend('<img src=\"logos_css/logoDAP_Cat.png\" style=\"float: left:1;width: 185px;\"/>')
+   });
+</script>
+
+
+<div class="watermark">DRAFT</div>
+
+****
+
+
+
+# 0. State:
+
+**Latest updates** 
+
+> July/2022
+
+**Done**
+
+* Meta_Analisi Associations of macrovascular(PVD) complications DM and Covid-19: UK,France,HM(Spain),Barcelona
+
+* MODEL1::[Meta-Analysis of Death ~ Macrovascular disease (unadjusted)]
+* MODEL2::[Meta-Analysis of Death ~ Macrovascular disease + Age + Sex]
+* MODEL3::[Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease] 
+
+
+* MODEL1::[Meta-Analysis of Uci ~ Macrovascular disease (unadjusted)]
+* MODEL2::[Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex]
+* MODEL3::[Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease]
+
+
+* MODEL1::[Meta-Analysis of Imv ~ Macrovascular disease (unadjusted)]
+* MODEL2::[Meta-Analysis of Imv ~ Macrovascular disease + Age + Sex]
+* MODEL3::[Meta-Analysis of Imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease]
+
+
+
+
+
+**Pending**
+
+* Error checking and debugging 
+
+# Analysis
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, include=F,size="huge")
+packages <-c("metafor","esc","readxl","esc","dummies")
+
+ipak<-function(pkg){
+  new.pkg<-pkg[!(pkg%in%installed.packages()[,"Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg,dependencies=TRUE)
+  sapply(pkg,require, character.only=TRUE)}
+
+ipak(packages)
+
+library("meta") 
+library("dplyr")
+library("ggplot2")
+
+#library("metafor")
+#library("esc")
+#library("dummies")
+
+# Funcions 
+link_source<-paste0("https://github.com/jrealgatius/Stat_codis/blob/master/funcions_propies.R","?raw=T")
+devtools::source_url(link_source)
+
+
+conductor<-here::here("conductor_meta_analisi.xlsx")
+
+conductor_codis2<-here::here("codis_Covid_Agrupadores_juny.xlsx")
+
+
+# apunts per entendre bé el META_ANALYSIS::
+
+#https://www.rdocumentation.org/packages/meta/versions/1.1-2/topics/forest
+#https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/
+
+```
+
+## 1  	Table of Meta-Analysis
+
+
+```{r lectura, include = TRUE}
+
+base_dades<-readxl::read_excel(conductor,sheet = "base_dades_TIA")
+
+
+base_dades<-base_dades %>% select(COUNTRY=camp,COUNTRY2=camp2,LOG_OR=LOG,SE_OR=SE,OR_MACRO,I1,I2)
+
+base_dades%>%
+  kable(caption="Table of Meta-Analysis",digits = 2)%>% 
+      kableExtra::kable_classic_2(full_width = F)
+
+
+#esquema<-readxl::read_excel(conductor,sheet="esquema")
+
+
+
+#esquema%>%
+#  kable(caption="Table of Models",digits = 2)%>% 
+#      kableExtra::kable_classic_2(full_width = F)
+
+
+
+base_dades$LOG_OR<-as.numeric(base_dades$LOG_OR)
+base_dades$SE_OR<-as.numeric(base_dades$SE_OR)
+
+
+
+
+
+
+
+```
+# 1.2 Flow Chart
+
+
+```{r flow_Chart,include=TRUE, warning=F}
+
+Flow_chart_Consort<-function(dt=ggconsort::trial_data,
+                             exclusions=c("declined","prior_chemo","bone_mets"),
+                             sequencial=TRUE,
+                             grups=NA,
+                             lab_start="Assessed for eligibility",
+                             lab_random="Analyzed sample",
+                             lab_exclusions=NULL)
+{
+
+  ## Testing
+  # dt=dt_nova
+  # exclusions= exclusions
+  # lab_exclusions=variables$labels
+  # grups = grups
+  # sequencial=sequencial
+  # lab_start="Assessed for eligibility"
+  # lab_random="Randomized"
+  # lab_exclusions=NULL
+
+  # dt=trial_data
+  # exclusions=c("declined","prior_chemo","bone_mets")
+  # # # Parametres
+  # lab_start="Assessed for eligibility"
+  # lab_random="Randomized"
+  # lab_exclusions=c("A","B","C")
+  # dt=trial_data
+  # exclusions<-c("exclusio1", "exclusio2","exclusio3")
+  # exclusions=c("declined","prior_chemo","bone_mets")
+  # exclusions=c("prior_chemo","bone_mets")
+  # # exclusions=c("bone_mets")
+  # grups="treatment"
+  # sequencial=T
+  # grups=NA
+  # grups="treatment"
+  # # #
+  # # #
+  # dt=iris
+  # exclusions=c("Sepal.Length < 5","Species=='setosa'")
+
+  # Proces per dicotomitzar criteris d'inclusió
+  # vector_crit_excl<-c("DG.ANGOR","edat<30 | edat>=90","ANT.FA","ANT.event","sexe=='H'","DG.AIT")
+  # subvector_a_canviar<-vector_crit_excl[vector_crit_excl %in% (dt_temp %>% names())] %>% paste0("==1")
+  # vector_crit_excl[vector_crit_excl %in% (dt_temp %>% names())]<-subvector_a_canviar
+
+  # Dicotomitzar....
+  subvector_a_canviar<-exclusions[exclusions %in% (dt %>% names())] %>% paste0("==1")
+  exclusions[exclusions %in% (dt %>% names())]<-subvector_a_canviar
+  dt<-generar_dummies_exclusions(dt=dt, criteris=exclusions)
+
+  # Num d'exclusions
+  N_exc<-length(exclusions)
+  noms_exclusions<-exclusions
+  exclusions<-paste0("exclusio",c(1:N_exc))
+
+  # Selecciono camps necessaris de dt (dades)
+  if (is.na(grups))
+  {dt<-dt %>%
+    dplyr::select(exclusions) %>% dplyr::mutate(grup="Overall",idp = row_number())
+  grup<-"Overall"} else
+  {dt<-dt %>% dplyr::select(exclusions,grup=grups) %>% dplyr::mutate(idp = dplyr::row_number())}
+
+  # capturar etiquetes
+  if (is.null(lab_exclusions)) labels_exclusions<-noms_exclusions else labels_exclusions<-lab_exclusions
+
+  label_grup<-grups
+  levels_grup<-dt %>% dplyr::select(grup) %>% stats::na.omit() %>% dplyr::distinct() %>% dplyr::pull(grup)
+  # Canvi de categories a grup numerats en character
+  dt<-dt %>% dplyr::mutate(grup=as.factor(grup) %>% as.numeric(),
+                           grup=dplyr::if_else(!is.na(grup),as.character(paste0("grup",grup)),NA_character_))
+
+  # Generar dataframes de filtre
+
+  # Inclusions sequencials
+  # Genero fitxers inclusions sequencials
+  dtlist_incl<-seq(1:N_exc) %>%
+    purrr::map(~paste0("!",exclusions[1:.x],collapse = " & ")) %>%
+    purrr::map(~dt %>% dplyr::filter(eval(parse(text = .x)))) %>%
+    purrr::set_names(paste0("included",1:N_exc))
+
+  # Inclusio final
+  dt_inclusio_final<-dtlist_incl[N_exc] %>% purrr::set_names("Included_final")
+
+  # Generar fitxers d'exclusions sequencials
+  dt_excluded_totals = dplyr::anti_join(dt, dt_inclusio_final[[1]], by = "idp")
+  dt_exc1 = dplyr::anti_join(dt, dtlist_incl[[1]], by = "idp")
+  # si hi ha una unica exclusio dtlist_exclusions<-NULL
+
+  if (N_exc>1) {
+    if (sequencial) {
+      dtlist_exclusions<-
+        purrr::map2(dtlist_incl[1:(N_exc-1)],dtlist_incl[-1],~anti_join(.x,.y,by = "idp")) %>%
+        purrr::set_names(paste0("Excluded",c(2:N_exc)))} else {
+
+          dtlist_exclusions<-c(2:N_exc) %>%
+            purrr::map(~paste0(exclusions[.x],"==1")) %>%
+            purrr::map(~dt %>% dplyr::filter(eval(parse(text = .x)))) %>%
+            purrr::set_names(paste0("Excluded",2:N_exc))
+        }} else {dtlist_exclusions<-NULL}
+
+  dtlist_exclusions<-append(list(Excluded1=dt_exc1),dtlist_exclusions)
+  # Inclusions finals per grups
+  # grup="FF.HTA"
+  dt_inclusions_grups<-
+    dtlist_incl[[N_exc]] %>% base::split(.[["grup"]])
+
+  # # Elimino els NA's
+  # dt_inclusions_grups$grupNA<-NULL
+
+  # Fusionar llistats de de inclosos + exclosos
+  llistat_arguments<-
+    c(dt_inclusio_final,dtlist_incl,dt_inclusions_grups,
+      list(Excluded_total=dt_excluded_totals),
+      dtlist_exclusions)
+
+  arglist = append(list(cohort_start(dt,lab_start)),
+                   llistat_arguments)
+
+  # Generar les cohorts via funció
+  dades_cohorts<-
+    do.call(cohort_define,
+            arglist)
+
+  # Provide text labels for cohorts ---------------------------
+  llistat_noms<-dades_cohorts$data %>% names()
+
+  llistat_labels<- c(lab_start,lab_random,
+                     paste0("Included",c(1:N_exc)),
+                     levels_grup,"Excluded",labels_exclusions)
+
+  # Labels
+  # llistat_noms<-dades_cohorts$data %>% names()
+  # llistat_noms<-c(".full","Included_final", paste0("Included",c(1:N_exc)),
+  #                 paste0("grup",1:length(levels_grup)),
+  #                 "Excluded_total",  paste0("Excluded",c(1:N_exc)))
+
+  for (i in 1:length(llistat_noms)) {
+    dades_cohorts$labels[llistat_noms[i]]<-llistat_labels[i]}
+
+  study_cohorts<-dades_cohorts
+
+  #
+  # study_cohorts<-
+  #   dades_cohorts %>%
+  #   cohort_label(
+  #     Included_final = lab_random,
+  #     grup1= "Allocated to arm A",
+  #     grup2 = "Allocated to arm B",
+  #     Excluded_total = "Excluded",
+  #     Excluded1 = "Declined to participate",
+  #     Excluded2 = "Prior chemotherapy",
+  #     Excluded3 = "Bone metastasis")
+
+  # Generar caixa d'exclusions
+  noms_exc<-paste0("Excluded",1:N_exc)
+
+  caixa_exc<-noms_exc %>%
+    purrr::map_chr(~paste0('• {cohort_count_adorn(study_cohorts, ', .x,')}<br>')) %>%
+    glue::glue_collapse()
+  caixa_exclusions<-paste0(
+    "{cohort_count_adorn(study_cohorts, Excluded_total)}<br>",
+    caixa_exc)
+
+
+  study_consort <- study_cohorts %>%
+    ggconsort::consort_box_add(
+      "full", 0, 50, ggconsort::cohort_count_adorn(study_cohorts, .full)
+    ) %>%
+    ggconsort::consort_box_add(
+      lab_random, 0, 30, ggconsort::cohort_count_adorn(study_cohorts,Included_final)
+    ) %>%
+
+    # consort_box_add(
+    #   "exclusions", 20, 40, glue::glue(caixa_exclusions)
+    # ) %>%
+
+
+    ggconsort::consort_box_add(
+      "exclusions", 10, 40, glue::glue(caixa_exclusions)
+    ) %>%
+
+
+    ggconsort::consort_arrow_add(
+      end = "exclusions", end_side = "left", start_x = 0, start_y = 40
+    ) %>%
+    ggconsort::consort_arrow_add(
+      "full", "bottom", lab_random, "top"
+    )
+
+  # En cas de By grups
+  if (!is.na(grups)) {
+
+    # By grups
+    study_consort <- study_consort %>%
+
+      ggconsort::consort_box_add(
+        "arm_a", -30, 10, ggconsort::cohort_count_adorn(study_cohorts, grup1)
+      ) %>%
+
+      ggconsort::consort_box_add(
+        "arm_b", 30, 10, ggconsort::cohort_count_adorn(study_cohorts, grup2)
+      )
+
+    study_consort<- study_consort %>%
+      ggconsort::consort_arrow_add(
+        start_x = 0, start_y = 30, end_x = 0, end_y = 20,
+      ) %>%
+      ggconsort::consort_line_add(
+        start_x = -30, start_y = 20, end_x = 30, end_y = 20,
+      )  %>%
+      ggconsort::consort_arrow_add(
+        end = "arm_a", end_side = "top", start_x = -30, start_y = 20
+      ) %>%
+      ggconsort::consort_arrow_add(
+        end = "arm_b", end_side = "top", start_x = 30, start_y = 20)
+
+  }
+
+  ## Fer-ho maco
+
+
+  if (!is.na(grups)) {
+
+    study_consort %>%
+      ggplot2::ggplot() +
+      ggconsort::geom_consort() +
+      ggconsort::theme_consort(margin_h = 8, margin_v = 1) +
+      # you can include other ggplot geoms, as needed -------------
+    ggtext::geom_richtext(
+      aes(x = 0, y = 10, label = "Allocation"),
+      fill = "#9bc0fc") } else
+      {
+        study_consort %>%
+          ggplot2::ggplot() +
+          ggconsort::geom_consort() + xlim(-10,20) +
+          ggconsort::theme_consort(margin_h = 10, margin_v = 1)
+      }
+}
+
+
+generar_dummies_exclusions<-function(dt=iris, criteris=c("Sepal.Length < 5","Species=='setosa'")) {
+
+  # dt=dt
+  # criteris=exclusions
+  # dt=dt, criteris=exclusions
+
+  # Generar dummies segons criteris d'inclusió
+  num_excl<-criteris %>% length()
+  cols_dummies<-paste0("exclusio",c(1:num_excl))
+
+  dt_dumies<-
+    purrr::map2_dfc(criteris,cols_dummies,
+                    ~dplyr::transmute(dt,!!sym(.y):=eval(parse(text=.x)))
+    ) %>% dplyr::mutate_all(as.numeric)
+
+  # Juntar-ho tot
+  # Truc per eliminar dumiis existents en dt
+  vars_dt<-names(dt)[!names(dt)%in% c(names(dt_dumies))]
+  dt %>% select(vars_dt) %>% dplyr::bind_cols(dt_dumies)
+
+}
+
+criteris_exclusio_ggconsort<-function(dt=dades,taulavariables="VARIABLES_R3b.xls",criteris="exclusio1",missings=T,...) {
+
+  # dt=dades
+  # taulavariables=conductor
+  # sheet="Exclusions"
+  # criteris="exclusio"
+  # missings=T
+
+
+  ##  2. Eliminar els espais en blanc de les variables factors del data.frame
+  dt<-dt %>%
+    dplyr::mutate_if(is.factor,funs(str_trim(.))) %>%
+    dplyr::mutate_if(is.character,funs(str_trim(.)))
+
+  ##  Llegeix criteris de variables
+  variables <- read_conductor(taulavariables,col_types = "text",...) %>% tidyr::as_tibble() %>% dplyr::select(camp,!!criteris)
+  # variables <- read_conductor(taulavariables,col_types = "text",sheet=sheet) %>% tidyr::as_tibble() %>% dplyr::select(camp,!!criteris)
+  # Filtrar valors
+  criteris_sym<-sym(criteris)
+  variables<-variables %>% dplyr::filter(!is.na(!!criteris_sym))
+  # variables[is.na(variables)]<- 0
+
+  # llista de caracters logics del filtre
+  char_logics<-c(">",">=","<","<=","==","!=","is.na") %>% paste0(collapse = '|')
+
+  ##  0. Filtro taula variables només variables implicades en el filtre i el genero
+  maco<-variables %>%
+    dplyr::filter_(paste0(criteris,"!=0")) %>% dplyr::select_("camp",criteris) %>%
+    transmute_("camp","crit_temp"=criteris) %>%
+    # if criteri missing is.na()
+    mutate(crit_temp=if_else(str_detect(crit_temp,"is.na"),paste0("is.na(",camp,")"),crit_temp)) %>%
+    mutate(camp=if_else(str_detect(crit_temp,"is.na"),"",camp)) %>%
+    # Si es texte sense igualtat --> la poso
+    mutate(crit_temp=if_else(str_detect(crit_temp,char_logics),crit_temp,paste0("=='",crit_temp,"'")))
+
+  # Genero la llista de filtres
+  maco<-maco %>% mutate(filtres=paste0("(",crit_temp,")"))
+
+  # Afegir valors valids per aplicar criteri (Si missings==F)
+  if (missings==F) maco<-maco %>% mutate(filtres=stringr::str_c("(", filtres, " & !is.na(",camp, "))"))
+
+  # Concateno condicions amb un OR
+  maco<-str_c(maco$filtres,collapse=" | ")
+
+  ## 1. Genera filtre en base a columna exclusio1   popes
+  popes<-str_c("!(",maco,")")
+
+  ##  3. Aplicar filtre: popes a dt
+  dt %>% dplyr::filter(eval(parse(text=popes)))
+
+}
+
+
+
+
+#devtools::install_github("jrealgatius/ggflowchart")
+
+
+UK_POB<-1846 
+UK_MIS<-1333
+FRANCE_POB<-1510
+FRANCE_MIS<-1333
+HM_POB<-406
+HM_MIS<-0
+SPAIN_POB<-344
+SPAIN_MIS<-23
+
+Ntotal<-UK_POB+FRANCE_POB+HM_POB+SPAIN_POB
+N_missings<-UK_MIS+FRANCE_MIS+HM_MIS+SPAIN_MIS
+
+#N_joves<-100
+
+library(ggconsort)
+library(dplyr)
+
+dades<-
+  tibble::tibble(id=1:Ntotal,missings=1:Ntotal) %>%
+  mutate(missings=if_else(missings<=N_missings,1,0))
+
+
+Flow_chart_Consort(dt=dades,
+                   exclusions=c("missings"),sequencial=TRUE,grups=NA,
+                   lab_start="Assessed for eligibility Complete Data for Macrovascular complications",
+                   lab_random="Analyzed sample",
+                   lab_exclusions="Missings")
+
+
+```
+## 2 Theory:What Are Meta-Analyses?
+
+*Meta-analyses aim to combine results from previous studies in a quantitative way. The goal of meta-analyses is to integrate quantitative outcomes reported in the selected studies into one numerical estimate. This estimate then summarizes all the individual results. Meta-analyses quantify, for example, the effect of a medication, the prevalence of a disease, or the correlation between two properties, across all studies. They can therefore only be applied to studies which report quantitative results. Compared to systematic reviews, meta-analyses often have to be more exclusive concerning the kind of evidence that is summarized. To perform a meta-analysis, it is usually necessary that studies used the same design and type of measurement, and/or delivered the same intervention.* 
+
+**The Statistics I2 (Higgins & Thompson’s Statistic) and τ2 , tell us if there is a lot of variability (Heterogeneity) between the different studies of the Meta-analysis, or if the difference is only due to chance**   
+
+**When the I2, exceeds 25%, or the P of τ2 <0.05, the variability must be studied.*
+
+* I2= 25%: Low heterogeneity
+* I2= 50%: Moderate heterogeneity
+* I2= 75%: Substantial heterogeneity.
+
+```{r recodes,include=TRUE}
+
+ROR_covid1<-base_dades%>%filter(COUNTRY=="UK_MOD1"       | COUNTRY=="FRANCE_MOD1"     | COUNTRY=="BCN_MOD1" )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2"     | COUNTRY=="BCN_MOD2" )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid3<-base_dades%>%filter(COUNTRY=="UK_MOD3"       | COUNTRY=="FRANCE_MOD3"     | COUNTRY=="BCN_MOD3" )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+
+ROR_covid1_uci<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci"       | COUNTRY=="FRANCE_MOD1_uci"    )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRANCE_MOD2_uci"    )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="UK_MOD3_uci"       | COUNTRY=="FRANCE_MOD3_uci"    )%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+
+ROR_covid1_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD1_imv"  )%>% 
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid2_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD2_imv"  )%>% 
+  select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid3_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD3_imv"  )%>% 
+  select(COUNTRY2,LOG_OR,SE_OR)
+
+
+
+```
+## 3  	RESULTS:
+
+* Meta-Analysis of Death ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+* Meta-Analysis of Uci ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+
+
+* Meta-Analysis of imv ~ Macrovascular disease (unadjusted).
+* Meta-Analysis of imv ~ Macrovascular disease + Age + Sex.
+* Meta-Analysis of imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+
+```
+
+
+```
+## 3.1  	Meta-Analysis of Death/Uci/Imv~ Macrovascular disease -PVD- (unadjusted).
+
+* UK.Model        Death ~ Macrovascular disease (unadjusted).
+* FRANCE.Model    Death ~ Macrovascular disease (unadjusted).
+* HM.Model        Death ~ Macrovascular disease (unadjusted).
+* BCN.Model       Death ~ Macrovascular disease (unadjusted).
+
+
+* UK.Model        Uci ~ Macrovascular disease (unadjusted).
+* FRANCE.Model    Uci ~ Macrovascular disease (unadjusted).
+* HM.Model        Uci ~ Macrovascular disease (unadjusted).
+
+
+
+
+* FRANCE.Model    imv ~ Macrovascular disease (unadjusted).
+
+
+
+
+## Meta_Analisi Associations of macrovascular complications -TIA- with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+```{r analisis_1a,include=TRUE}
+
+meta1<-meta::metagen(TE=ROR_covid1$LOG_OR,
+               seTE=ROR_covid1$SE_OR,
+               studlab = ROR_covid1$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta1,
+             fontsize=9,
+             boxsize=5,
+             col.square="black", 
+             hetstat=TRUE,
+             leftcols="studlab",
+             rightcols=c("effect","ci","w.fixed"),
+             xlim=c(0.2, 5),
+             squaresize=0.5,
+             print.tau2 = FALSE,
+             print.I2= TRUE,
+             plotwidth=unit(9,"cm"),
+             colgap=unit(3, "mm"))
+
+
+```
+
+
+## Meta_Analisi Associations of macrovascular complications -TIA- with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Random effect model).
+```{r analisis_1b,include=TRUE}
+
+
+
+meta1b<-meta::metagen(TE=ROR_covid1_uci$LOG_OR,
+               seTE=ROR_covid1_uci$SE_OR,
+               studlab = ROR_covid1_uci$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+
+meta::forest(meta1b,
+             fontsize=8.2, 
+             boxsize=5, 
+             col.square="black", 
+             hetstat=TRUE,
+             leftcols="studlab",
+             rightcols=c("effect", "ci","w.random"),
+             xlim=c(0.1, 5),
+             squaresize=0.5,
+             plotwidth=unit(9, "cm"),
+             colgap=unit(3, "mm"))
+
+
+```
+
+
+
+
+
+
+
+
+## 3.2  	Meta-Analysis of Death/Uci/Uci_Death/Imv ~ Macrovascular -TIA- disease + Age + Sex.
+
+* UK.Model        Death ~ Macrovascular disease + Age + Sex.
+* FRANCE.Model    Death ~ Macrovascular disease + Age + Sex.
+* HM.Model        Death ~ Macrovascular disease + Age + Sex.
+* BCN.Model       Death ~ Macrovascular disease + Age + Sex.
+
+* UK.Model        Uci ~ Macrovascular disease + Age + Sex.
+* FRANCE.Model    Uci ~ Macrovascular disease + Age + Sex.
+* HM.Model        Uci ~ Macrovascular disease + Age + Sex.
+
+* FRANCE.Model    imv ~ Macrovascular disease + Age + Sex.
+
+
+
+## Meta_Analisi Associations of macrovascular complications -TIA- with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+```{r analisis2a,include=TRUE}
+
+meta2<-meta::metagen(TE=ROR_covid2$LOG_OR,
+               seTE=ROR_covid2$SE_OR,
+               studlab = ROR_covid2$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+meta::forest(meta2,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),
+             squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+
+
+
+
+```
+
+
+## Meta_Analisi Associations of macrovascular complications -TIA- with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
+```{r analisis2b,include=TRUE}
+
+meta2b<-meta::metagen(TE=ROR_covid2_uci$LOG_OR,
+               seTE=ROR_covid2_uci$SE_OR,
+               studlab = ROR_covid2_uci$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta2b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),
+             squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+
+
+
+
+```
+
+
+
+## 3.3  	Meta-Analysis of Death/Uci/Imv ~ Macrovascular disease -TIA- + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease.
+
+* UK.Model        Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+* FRANCE.Model    Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+* BCN.Model       Death ~ Macrovascular disease + Age + Sex + Hypertension + "--------------" + "---------------------"
+
+* UK.Model        Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+* FRANCE.Model    Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+*
+* FRANCE.Model    imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes  + Microvascular disease..
+
+
+
+## Meta_Analisi Associations of macrovascular complications-TIA- with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis3a,include=TRUE}
+
+meta3<-meta::metagen(TE=ROR_covid3$LOG_OR,
+               seTE=ROR_covid3$SE_OR,
+               studlab = ROR_covid3$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta3,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+
+
+```
+
+## Meta_Analisi Associations of macrovascular complications-TIA- with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
+* In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
+
+```{r analisis3b,include=TRUE}
+
+
+
+meta3b<-meta::metagen(TE=ROR_covid3_uci$LOG_OR,
+               seTE=ROR_covid3_uci$SE_OR,
+               studlab = ROR_covid3_uci$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta3b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+```
+
+
+## 4. ANNEX: Macrovascular Complications Codes 
+
+
+```{r codis_MACRO, include=T}
+
+
+
+
+readxl::read_excel(conductor_codis2,col_types = "text")%>%dplyr::select(cod,Descripcio,agr,agr0,agr2)%>% filter(agr=="TIA")%>%dplyr::select(cod,agr)%>% knitr::kable(caption="ICD10 TIA(TRANSIENT ISCHAEMIC ATTACK) Codes ")
+
+
+```
+
+
+# References
+
+
+---
+nocite: '@*'
+...
+
+
+
+
+&nbsp;
+<hr />
+<p style="text-align: center;">A work by $Jordi Real$ $Rai Puig$ </a></p>
+<p style="text-align: center;">$Llepali System$ </a></p>
+<p style="text-align: center;"><span style="color: #808080;"><em><https://github.com/USR-DAPCAT/></em></span></p>
+
+
