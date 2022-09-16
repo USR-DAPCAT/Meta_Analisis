@@ -631,7 +631,7 @@ meta::forest(meta1b,
 
 ## Meta_Analisi Associations of macrovascular complications -IHD- with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Unadjusted model
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
-```{r analisis_1b,include=TRUE}
+```{r analisis_1c,include=TRUE}
 
 #UK_MOD1_imv
 
@@ -722,7 +722,7 @@ meta::forest(meta2b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 
 ## Meta_Analisi Associations of macrovascular complications -IHD- with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
-```{r analisis2b,include=TRUE}
+```{r analisis2c,include=TRUE}
 
 meta2b<-meta::metagen(TE=ROR_covid2_imv$LOG_OR,
                seTE=ROR_covid2_imv$SE_OR,
@@ -800,7 +800,7 @@ meta::forest(meta3b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,le
 ## Meta_Analisi Associations of macrovascular complications-IHD- with IMV in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Age + Sex + Hypertension + Type of Diabetes + Microvascular disease).
 * In this  case, there is  not variability between the 2 studies, so we will accept the average effect of the 2 studies (Common effect model).
 
-```{r analisis3b,include=TRUE}
+```{r analisis3c,include=TRUE}
 
 
 
