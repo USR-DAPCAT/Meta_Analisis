@@ -111,6 +111,10 @@ conductor_codis2<-here::here("codis_Covid_Agrupadores_juny.xlsx")
 #https://www.rdocumentation.org/packages/meta/versions/1.1-2/topics/forest
 #https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/
 
+
+
+
+
 ```
 
 ## 1  	Table of Meta-Analysis

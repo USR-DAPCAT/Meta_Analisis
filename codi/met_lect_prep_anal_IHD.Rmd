@@ -511,6 +511,9 @@ ROR_covid2<-base_dades%>%filter(COUNTRY=="UK_MOD2"       | COUNTRY=="FRANCE_MOD2
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3<-base_dades%>%filter(COUNTRY=="UK_MOD3"       | COUNTRY=="FRANCE_MOD3"   | COUNTRY=="HM_MOD3"  | COUNTRY=="BCN_MOD3" )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid4<-base_dades%>%filter(COUNTRY=="UK_MOD4"       | COUNTRY=="FRANCE_MOD4"                         | COUNTRY=="BCN_MOD4")%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+
 
 ROR_covid1_uci<-base_dades%>%filter(COUNTRY=="UK_MOD1_uci"       | COUNTRY=="FRANCE_MOD1_uci"   | COUNTRY=="HM_MOD1_uci" | COUNTRY=="BCN_MOD1_uci"  )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
@@ -518,6 +521,10 @@ ROR_covid2_uci<-base_dades%>%filter(COUNTRY=="UK_MOD2_uci"       | COUNTRY=="FRA
   select(COUNTRY2,LOG_OR,SE_OR)
 ROR_covid3_uci<-base_dades%>%filter(COUNTRY=="UK_MOD3_uci"       | COUNTRY=="FRANCE_MOD3_uci"   | COUNTRY=="HM_MOD3_uci" | COUNTRY=="BCN_MOD3_uci"  )%>%
   select(COUNTRY2,LOG_OR,SE_OR)
+ROR_covid4_uci<-base_dades%>%filter(COUNTRY=="UK_MOD4_uci"           | COUNTRY=="FRANCE_MOD4_uci"                            | COUNTRY=="BCN_MOD4_uci")%>%
+  select(COUNTRY2,LOG_OR,SE_OR)
+
+
 
 ROR_covid1_imv<-base_dades%>%filter(COUNTRY=="FRANCE_MOD1_imv"  | COUNTRY=="HM_MOD1_imv" )%>% 
   select(COUNTRY2,LOG_OR,SE_OR)
@@ -814,6 +821,54 @@ meta3b<-meta::metagen(TE=ROR_covid3_imv$LOG_OR,
 meta::forest(meta3b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
 
 ```
+
+## 3.4  	.
+
+* UK.Model        Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+* FRANCE.Model    Death ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+* UK.Model        Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+* FRANCE.Model    Uci ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+* FRANCE.Model    Imv ~ Macrovascular disease + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia.
+
+
+## Meta_Analisi Associations of macrovascular complications-IHD- with DEATH in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Meta-Analysis of Death ~ Macrovascular disease -IHD- + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis4a,include=TRUE}
+
+meta4<-meta::metagen(TE=ROR_covid4$LOG_OR,
+               seTE=ROR_covid4$SE_OR,
+               studlab = ROR_covid4$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with death in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta4,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+
+
+```
+
+## Meta_Analisi Associations of macrovascular complications-IHD- with UCI in patients with diabetes hospitalized for Coronavirus disease(COVID-19).Ajusted model(Meta-Analysis of Uci ~ Macrovascular disease -IHD- + Age + Sex + Hypertension + Type of Diabetes + Microvascular disease + BMI + Etnia).
+* In this  case, there is  not variability between the 3 studies, so we will accept the average effect of the 3 studies (Common effect model).
+
+```{r analisis4b,include=TRUE}
+
+
+
+meta4b<-meta::metagen(TE=ROR_covid4_uci$LOG_OR,
+               seTE=ROR_covid4_uci$SE_OR,
+               studlab = ROR_covid4_uci$COUNTRY2,
+               sm = 'OR',
+               title = "Meta_Analisi Associations of macrovascular complications with Uci in patients with diabetes hospitalized for Coronavirus disease(COVID-19)")
+
+
+meta::forest(meta4b,fontsize=8.2, boxsize=5, col.square="black", hetstat=TRUE,leftcols="studlab",rightcols=c("effect", "ci","w.fixed"),xlim=c(0.2, 5),squaresize=0.5,plotwidth=unit(9, "cm"),colgap=unit(3, "mm"))
+
+```
+
 
 
 
